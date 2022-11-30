@@ -29,7 +29,9 @@ public class Program
         Spices pepper = new Spices(Spices.Pepper, 50);
 
         Alchohol bear = new Alchohol(Alchohol.Bear, 200);
-        Alchohol Vine = new Alchohol(Alchohol.Vine, 1000);
+        Alchohol vine = new Alchohol(Alchohol.Vine, 1000);
+        Alchohol vodka = new Alchohol(Alchohol.Vodka, 800);
+        Alchohol rom = new Alchohol(Alchohol.Rom, 2000);
 
         List<Product> allProducts = new List<Product>
         {
@@ -47,7 +49,11 @@ public class Program
             cheese_Sauce,
             ketchup,
             solt,
-            pepper
+            pepper,
+            bear,
+            vine,
+            vodka,
+            rom
         };
         #endregion
 
@@ -99,7 +105,7 @@ public class Program
     public static void ViewMainMenu(List<RestoBar> allRestoBars)
     {
         Console.WriteLine("MAIN MENU");
-        Console.SetCursorPosition(0, 7);
+      //  Console.SetCursorPosition(0, 7);
         MainMenuButtons(allRestoBars);
     }
     public static void MainMenuButtons(List<RestoBar> allRestoBars)
@@ -125,7 +131,7 @@ public class Program
     }
     public static void RestoBarsListMenuButtons(List<RestoBar> allRestoBars)
     {
-        Console.WriteLine("Enter {Backspace} key - to BACK\n" +
+        Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
                   "Enter {Esc} key - to Exit and End Program");
         string[] keys = new string[]
         {
@@ -166,6 +172,7 @@ public class Program
         while (!keys.Contains(input));
         return input;
     }
+   // ConsoleKey consoleKey = new ConsoleKey();
     public static void ViewRestoBars(List<RestoBar> allRestoBars)
     {
         int indexofRestoBars = 0;
@@ -175,12 +182,13 @@ public class Program
             indexofRestoBars++;
             Console.WriteLine($"Enter {{{indexofRestoBars}}} key - to see Restourant {restobar.Name} info ");
         }
-        Console.WriteLine("Enter {Backspace} key - to BACK\n" +
+        Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
                           "Enter {Esc} key - to Exit and End Program");
+
         List<string> keys = new List<string>()
         {
             "Backspace",
-            "Escape"
+            "Escape",            
         };
         int secondIndexofRestoBars = indexofRestoBars + 1;
         for (int i = 1; i < secondIndexofRestoBars; i++)
@@ -205,9 +213,4 @@ public class Program
         allRestoBars[secondIndex].ViewRestobarInfo();
         RestoBarsListMenuButtons(allRestoBars);
     }
-
-
-
-
 }
-
