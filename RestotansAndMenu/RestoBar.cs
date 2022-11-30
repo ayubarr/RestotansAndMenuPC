@@ -35,6 +35,7 @@ namespace RestouransAndMenu
         }
         public void ViewRestobarMenu()
         {
+            Mealfs = Mealfs.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
 
             int i = 1;
             foreach (var mealf in Mealfs)
@@ -42,15 +43,15 @@ namespace RestouransAndMenu
                 mealf.Key.ViewProductsAndPrice(i++);
                 
 
-                Mealfs = Mealfs.OrderBy(x => x.Value).ToList();
-              //  Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
-                foreach (var item in Mealfs)
-                {
-                    Console.WriteLine($"{item.Key.MealfName} - {item.Value / 100} Som");
-                }
+                //  Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
+                //foreach (var item in Mealfs)
+                //{
+                 Console.WriteLine($"\n{mealf.Key.MealfName} sell price = {mealf.Value / 100} Som\n");
+
+                //  //  Console.WriteLine($"{item.Key.MealfName} - {item.Value / 100} Som");
+                //}
 
 
-                Console.WriteLine($"\n{mealf.Key.MealfName} sell price = {mealf.Value / 100} Som\n");
             }
         }
     }

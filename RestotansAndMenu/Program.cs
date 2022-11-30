@@ -166,7 +166,6 @@ public class Program
         {
             Console.WriteLine($"{item.Name} - {item.GrammPrice / 100} Som for gram");
         }
-       // RestoBarsListMenuButtons(allRestoBars, AllMealfs, allProducts);
     }
 
     #region Create_RestoBar
@@ -194,7 +193,10 @@ public class Program
         for (int i = 0; i < howManyMealfs; i++)
         {
             Console.Write($"[{i+1} Mealf]");
-            RestBarMealfs = CreateMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
+            Console.WriteLine("Do you want to Use an existing Mealf or Create a new one?\r\n");
+
+          //  CreateNewMealfOrUseExcitengMealfButtons(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
+           RestBarMealfs = CreateMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
         }
 
         RestoBar newRestoBar = new RestoBar(restoBarName, restoBarShefName, RestBarMealfs);
@@ -208,11 +210,8 @@ public class Program
 
 
     }
-    public static void UseExcitingMealfs(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts) //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<
+    public static void UseExcitingMealfs(List<RestoBar> allRestoBars, List<Mealf> RestBarMealfs, List<Mealf> AllMealfs, List<Product> allProducts) //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<
     {
-        Mealf[] mealfArray = new Mealf[AllMealfs.Count];
-
-
         AllMealfs = AllMealfs.OrderBy(x => x.MealfPrice).ToList();
         Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
         int i = 0;
@@ -220,32 +219,30 @@ public class Program
         {
             i++;
             Console.WriteLine($"{i}){item.MealfName} - {item.MealfPrice * 0.12 / 100} Som");
-            if(i == AllMealfs.Count)
-            {
-                Console.WriteLine("Enter number of Mealf");
-
-
-                string MealSfIndex = Console.ReadLine();
-                double MealfIndex;
-                while (!double.TryParse(MealSfIndex, out MealfIndex))
-                {
-                    Console.WriteLine("Enter only numbers!\nEnter number of Mealf");
-                    MealSfIndex = Console.ReadLine();
-                }
-
-            }
+        }
+        Console.WriteLine("Enter number of Mealf");
+        i--;
+        string MealSfIndex = Console.ReadLine();
+        int MealfIndex;
+        while (!int.TryParse(MealSfIndex, out MealfIndex))
+        {
+            Console.WriteLine("Enter only numbers!\nEnter number of Mealf");
+            MealSfIndex = Console.ReadLine();
+        }
+        if(MealfIndex == i)
+        {
+            RestBarMealfs.Add(AllMealfs[i]);
         }
 
-
+        CreateMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
     }
     public static List<Mealf> CreateMealfs(List<RestoBar> allRestoBars, List<Mealf> RestBarMealfs, List<Mealf> AllMealfs, List<Product> allProducts)
     {
-        Console.WriteLine("Do you want to Use an existing Mealf or Create a new one?\r\n");
 
-        CreateNewMealfOrUseExcitengMealfButtons(allRestoBars, AllMealfs, allProducts);
-
+        CreateNewMealfOrUseExcitengMealfButtons(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
 
         Console.WriteLine("What is your Mealf name?");
+
         string mealfName = Console.ReadLine();
 
         //TODO: список всех продуктов, клавиша создать
@@ -343,7 +340,7 @@ public class Program
 
     }
 
-    public static void CreateNewMealfOrUseExcitengMealfButtons(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
+    public static void CreateNewMealfOrUseExcitengMealfButtons(List<RestoBar> allRestoBars, List<Mealf> RestBarMealfs, List<Mealf> AllMealfs, List<Product> allProducts)
     {
 
         Console.WriteLine("\n\nEnter {C} key - to create new\n" +
@@ -359,9 +356,10 @@ public class Program
         {
             case "U":
                 Console.Clear();
-                UseExcitingMealfs(allRestoBars, AllMealfs, allProducts);
+                UseExcitingMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
                 break;
             case "C":
+               // CreateMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
                 Console.Clear();
                 break;
         }
