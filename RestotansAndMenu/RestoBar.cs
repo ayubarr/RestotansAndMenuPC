@@ -17,10 +17,10 @@ namespace RestouransAndMenu
             Name = name;
             ChefsName = chefsName;
             Mealfs = new Dictionary<Mealf, double>();
-            foreach (Mealf meal in mealfs)
+            foreach (Mealf mealf in mealfs)
             {
-                double mealfPrice = Math.Round(meal.MealfPrice * 1.2, 2);
-                Mealfs.Add(meal, mealfPrice);
+                double mealfPrice = Math.Round(mealf.MealfPrice * 0.12 , 3);
+                Mealfs.Add(mealf, mealfPrice);
             }
         }
   
@@ -39,7 +39,7 @@ namespace RestouransAndMenu
             foreach (var mealf in Mealfs)
             {
                 mealf.Key.ViewProductsAndPrice(i++);
-                Console.WriteLine($"\n{mealf.Key.MealfName} sell price = {mealf.Value} Som\n");
+                Console.WriteLine($"\n{mealf.Key.MealfName} sell price = {mealf.Value / 100} Som\n");
             }
         }
     }

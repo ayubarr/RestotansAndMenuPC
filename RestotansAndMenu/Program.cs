@@ -95,8 +95,6 @@ public class Program
         #endregion
 
         ViewMainMenu(allRestoBars);
-
-
     }
     public static void ViewMainMenu(List<RestoBar> allRestoBars)
     {
@@ -106,7 +104,6 @@ public class Program
     }
     public static void MainMenuButtons(List<RestoBar> allRestoBars)
     {
-
         Console.WriteLine("Enter {Z} key - to see Restaurants List\n\n");
         Console.WriteLine("Enter {Esc} key - to Exit and End Program");
         string[] keys = new string[]
@@ -168,7 +165,6 @@ public class Program
         }
         while (!keys.Contains(input));
         return input;
-
     }
     public static void ViewRestoBars(List<RestoBar> allRestoBars)
     {
@@ -186,7 +182,6 @@ public class Program
             "Backspace",
             "Escape"
         };
-
         int secondIndexofRestoBars = indexofRestoBars + 1;
         for (int i = 1; i < secondIndexofRestoBars; i++)
         {

@@ -52,8 +52,9 @@ namespace RestouransAndMenu
         {
             foreach (var product in Products)
             {
-                double price = product.Key.GrammPrice * 0.1;
-                Console.WriteLine($"{product.Key.Name} - {product.Value} grams - {price} Som");
+                double price = product.Key.GrammPrice * product.Value;
+                double correctPrice = price / 1000;
+                Console.WriteLine($"{product.Key.Name} - {product.Value} grams - {correctPrice} Som");
             }
         }
         public Dictionary<Product, double> Products = new Dictionary<Product, double>();
