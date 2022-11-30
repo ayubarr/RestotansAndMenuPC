@@ -1,5 +1,6 @@
 ﻿using RestotansAndMenu;
 using RestouransAndMenu;
+using System.ComponentModel.Design;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 
@@ -13,10 +14,10 @@ public class Program
         Fruits grape = new Fruits(Fruits.Grape, 110);
         Fruits orange = new Fruits(Fruits.Orange, 130);
 
-        Vegetables tomato = new Vegetables(Vegetables.Tomato, 70);
-        Vegetables onion = new Vegetables(Vegetables.Onion, 40);
-        Vegetables cucumber = new Vegetables(Vegetables.Cucumber, 50);
-        Vegetables lettuce_Leaf = new Vegetables(Vegetables.Lettuce_Leaf, 60);
+        Vegetables tomato = new Vegetables(Vegetables.Tomato, 170);
+        Vegetables onion = new Vegetables(Vegetables.Onion, 140);
+        Vegetables cucumber = new Vegetables(Vegetables.Cucumber, 150);
+        Vegetables lettuce_Leaf = new Vegetables(Vegetables.Lettuce_Leaf, 160);
 
         Meats cowMeat = new Meats(Meats.Cow_Meat, 500);
         Meats chikenMeat = new Meats(Meats.Chicken_Meat, 400);
@@ -70,7 +71,7 @@ public class Program
         {
             {cowMeat, 150 },
             {chikenMeat, 100 }
-        };
+        };       
         Dictionary<Product, double> fruitSaladProducts = new Dictionary<Product, double>
         {
             {banana, 50 },
@@ -78,6 +79,24 @@ public class Program
             {grape, 50},
             {orange, 50 },
         };
+        Dictionary<Product, double> RomToniProducts = new Dictionary<Product, double>
+        {
+            {vodka, 50 },
+            {rom, 100 },
+            {grape, 50},
+            {orange, 50 },
+        };
+        Dictionary<Product, double> TomatoSaladProducts = new Dictionary<Product, double>
+        {
+            {tomato, 100 },
+            {cucumber, 100 },
+            {lettuce_Leaf, 50},
+            {onion, 50 },
+        };
+        Mealf romToni = new Mealf("romToni", RomToniProducts);
+        Mealf tomatoSalad = new Mealf("tomatoSalad", TomatoSaladProducts);
+
+
         Mealf cowKebab = new Mealf(Mealf.Cow_Kebab, CowKebabProducts);
         Mealf chikenKebab = new Mealf(Mealf.Chicken_Kebab, ChikenKebabProducts);
         Mealf assortiKebab = new Mealf(Mealf.Assorti_Kebab, AssortiKebabProducts);
@@ -85,32 +104,83 @@ public class Program
         #endregion
 
         #region RestoBars_Create
+        
+
+        List<Mealf> AllMealfs = new List<Mealf>
+        {
+            cowKebab,
+            chikenKebab,
+            assortiKebab,
+            fruitSalad,
+            romToni,
+            tomatoSalad
+        };
         List<Mealf> SluhiAndPivoMeals = new List<Mealf>
         {
             cowKebab,
             chikenKebab,
             assortiKebab,
             fruitSalad
+   
         };
+        List<Mealf> VodkaHomeMealfs = new List<Mealf>
+        {
+            romToni,
+            tomatoSalad
+        };
+
+
+
         RestoBar ShluhiAndPivo = new RestoBar("BitchAndBear", "Bob", SluhiAndPivoMeals);
+        RestoBar VodkaHome = new RestoBar("VodkaHome", "Oleg", VodkaHomeMealfs);
+
 
         List<RestoBar> allRestoBars = new List<RestoBar>()
         {
-            ShluhiAndPivo
+            ShluhiAndPivo,
+            VodkaHome
         };
         #endregion
 
-        ViewMainMenu(allRestoBars);
+        ViewMainMenu(allRestoBars, AllMealfs, allProducts);
     }
-    public static RestoBar CreateRestourant(List<RestoBar> allRestoBars)
+
+
+    public static void SortMealfForPrice(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
     {
+        AllMealfs = AllMealfs.OrderBy( x => x.MealfPrice ).ToList();
+        Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
+        foreach (var item in AllMealfs)
+        {
+            Console.WriteLine($"{item.MealfName} - {item.MealfPrice * 0.12 / 100} Som");
+        }
+        SortProductForPrice(allProducts);
+        RestoBarsListMenuButtons(allRestoBars, AllMealfs, allProducts);
+    }
+
+    public static void SortProductForPrice( List<Product> allProducts)
+    {
+        allProducts = allProducts.OrderBy(x => x.GrammPrice).ToList();
+        Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
+        foreach (var item in allProducts)
+        {
+            Console.WriteLine($"{item.Name} - {item.GrammPrice / 100} Som for gram");
+        }
+       // RestoBarsListMenuButtons(allRestoBars, AllMealfs, allProducts);
+    }
+
+    #region Create_RestoBar
+    public static RestoBar CreateRestourant(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
+    {
+
         Console.WriteLine("What is your RestoBar Name?");
         string restoBarName = Console.ReadLine();
 
         Console.WriteLine("What is name of your Shef?");
         string restoBarShefName = Console.ReadLine();
 
-        List<Mealf> RestBarMealfs = new List<Mealf>();
+
+        List<Mealf> RestBarMealfs = new List<Mealf>();                                 //>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         //TODO: список всех блюд, и возможность их добавления в ресторан(не обязательно)
         Console.WriteLine("How much Mealfs is needed for create your RestoBar?");
@@ -124,28 +194,64 @@ public class Program
         for (int i = 0; i < howManyMealfs; i++)
         {
             Console.Write($"[{i+1} Mealf]");
-            RestBarMealfs = CreateMealfs(RestBarMealfs);
+            RestBarMealfs = CreateMealfs(allRestoBars, RestBarMealfs, AllMealfs, allProducts);
         }
 
         RestoBar newRestoBar = new RestoBar(restoBarName, restoBarShefName, RestBarMealfs);
         allRestoBars.Add(newRestoBar);
+
         Console.Clear();
-        ViewRestoBars(allRestoBars);
+        ViewRestoBars(allRestoBars, AllMealfs, allProducts);
 
         return newRestoBar;
 
-        //TODO: добавить клавиши для меню
 
 
     }
-    #region Create_RestoBar
-    public static List<Mealf> CreateMealfs(List<Mealf> RestBarMealfs)
+    public static void UseExcitingMealfs(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts) //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<
     {
+        Mealf[] mealfArray = new Mealf[AllMealfs.Count];
+
+
+        AllMealfs = AllMealfs.OrderBy(x => x.MealfPrice).ToList();
+        Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
+        int i = 0;
+        foreach (var item in AllMealfs)
+        {
+            i++;
+            Console.WriteLine($"{i}){item.MealfName} - {item.MealfPrice * 0.12 / 100} Som");
+            if(i == AllMealfs.Count)
+            {
+                Console.WriteLine("Enter number of Mealf");
+
+
+                string MealSfIndex = Console.ReadLine();
+                double MealfIndex;
+                while (!double.TryParse(MealSfIndex, out MealfIndex))
+                {
+                    Console.WriteLine("Enter only numbers!\nEnter number of Mealf");
+                    MealSfIndex = Console.ReadLine();
+                }
+
+            }
+        }
+
+
+    }
+    public static List<Mealf> CreateMealfs(List<RestoBar> allRestoBars, List<Mealf> RestBarMealfs, List<Mealf> AllMealfs, List<Product> allProducts)
+    {
+        Console.WriteLine("Do you want to Use an existing Mealf or Create a new one?\r\n");
+
+        CreateNewMealfOrUseExcitengMealfButtons(allRestoBars, AllMealfs, allProducts);
+
+
         Console.WriteLine("What is your Mealf name?");
         string mealfName = Console.ReadLine();
-       // Console.WriteLine("what products are used in this Mealf?");
 
         //TODO: список всех продуктов, клавиша создать
+
+
+
 
         Dictionary<Product, double> MealfProducts = new Dictionary<Product, double>();
 
@@ -162,7 +268,7 @@ public class Program
         for (int i = 0; i < howManyProducts; i++)
         {
             Console.Write($"[{i + 1} Product]");
-            Product newProduct = CreateProduct();
+            Product newProduct = CreateProduct(allProducts);
             Console.WriteLine("How many grams of the product is needed for cooking this Mealf?");
             string prouctSAmount = Console.ReadLine();
             double prouctAmount;
@@ -174,16 +280,18 @@ public class Program
 
             MealfProducts.Add(newProduct, prouctAmount);
         }
-        Mealf newMealf = new Mealf(mealfName, MealfProducts);
 
+        Mealf newMealf = new Mealf(mealfName, MealfProducts);
         RestBarMealfs.Add(newMealf);
+
+        AllMealfs.Add(newMealf);
+
+
+
         return RestBarMealfs;
 
-
-        //TODO: добавить клавиши для меню
-
     }
-    public static Product CreateProduct()
+    public static Product CreateProduct(List<Product> allProducts)
     {
 
         Console.WriteLine("What is your product name?");
@@ -197,8 +305,7 @@ public class Program
             prouctSPrice = Console.ReadLine();
         }
         Product newProduct = new Product(productName, prouctPrice);
-
-       //MealfProducts.Add(newProduct, 0);
+        allProducts.Add(newProduct);
         return newProduct;
     }
     #endregion
@@ -206,14 +313,13 @@ public class Program
 
 
 
-
-    public static void ViewMainMenu(List<RestoBar> allRestoBars)
+    public static void ViewMainMenu(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
     {
         Console.WriteLine("MAIN MENU");
       //  Console.SetCursorPosition(0, 7);
-        MainMenuButtons(allRestoBars);
+        MainMenuButtons(allRestoBars, AllMealfs, allProducts);
     }
-    public static void MainMenuButtons(List<RestoBar> allRestoBars)
+    public static void MainMenuButtons(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
     {
         Console.WriteLine("Enter {Z} key - to see Restaurants List\n\n");
         Console.WriteLine("Enter {Esc} key - to Exit and End Program");
@@ -223,21 +329,47 @@ public class Program
                     "Ecape"
         };
         string choiceButtom = Button(keys);
+
         switch (choiceButtom)
         {
             case "Z":
                 Console.Clear();
-                ViewRestoBars(allRestoBars);
+                ViewRestoBars(allRestoBars, AllMealfs, allProducts);
                 break;
             case "Escape":
                 Environment.Exit(0);
                 break;
         }
+
     }
-    public static void RestoBarsListMenuButtons(List<RestoBar> allRestoBars)
+
+    public static void CreateNewMealfOrUseExcitengMealfButtons(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
+    {
+
+        Console.WriteLine("\n\nEnter {C} key - to create new\n" +
+                         "Enter {U} key - to use an existing Mealf");
+        string[] keys = new string[]
+        {
+            "U",
+            "C"
+        };
+        string choice = Button(keys);
+
+        switch (choice)
+        {
+            case "U":
+                Console.Clear();
+                UseExcitingMealfs(allRestoBars, AllMealfs, allProducts);
+                break;
+            case "C":
+                Console.Clear();
+                break;
+        }
+    }
+    public static void RestoBarsListMenuButtons(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts) 
     {
         Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
-                  "Enter {Esc} key - to Exit and End Program");
+       "Enter {Esc} key - to Exit and End Program");
         string[] keys = new string[]
         {
             "Backspace",
@@ -249,13 +381,14 @@ public class Program
         {
             case "Backspace":
                 Console.Clear();
-                ViewRestoBars(allRestoBars);
+                ViewRestoBars(allRestoBars, AllMealfs, allProducts);
                 break;
             case "Escape":
                 Environment.Exit(0);
                 break;
         }
     }
+
     public static string Button(string[] keys)
     {
         string input = "";
@@ -277,8 +410,7 @@ public class Program
         while (!keys.Contains(input));
         return input;
     }
-    //ConsoleKey consoleKey = new ConsoleKey();
-    public static void ViewRestoBars(List<RestoBar> allRestoBars)
+    public static void ViewRestoBars(List<RestoBar> allRestoBars, List<Mealf> AllMealfs, List<Product> allProducts)
     {
         int indexofRestoBars = 0;
         foreach (var restobar in allRestoBars)
@@ -286,14 +418,18 @@ public class Program
             indexofRestoBars++;
             Console.WriteLine($"Enter {{{indexofRestoBars}}} key - to see Restourant {restobar.Name} info ");
         }
-        Console.WriteLine("\nEnter {C} key - to create new RestoBar\n");
+        Console.WriteLine("\nEnter {C} key - to create new RestoBar\n" +
+                          "\nEnter {S} key - to View all sorts\n" +
+                          "\nEnter {D} key - to Delete and Create again RestoBar (full RestoBar editing )\n");
         Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
                           "Enter {Esc} key - to Exit and End Program");
         List<string> keys = new List<string>()
         {
             "Backspace",
             "Escape",
-            "C"
+            "C",
+            "S",
+            "D"
         };
         int secondIndexofRestoBars = indexofRestoBars + 1;
         for (int i = 1; i < secondIndexofRestoBars; i++)
@@ -305,14 +441,20 @@ public class Program
         {
             case "Backspace":
                 Console.Clear();
-                ViewMainMenu(allRestoBars);
+                ViewMainMenu(allRestoBars, AllMealfs, allProducts);
                 break;
             case "Escape":
                 Environment.Exit(0);
                 break;
             case "C":
                 Console.Clear();
-                CreateRestourant(allRestoBars);
+                CreateRestourant(allRestoBars, AllMealfs, allProducts);
+                break;
+            case "S":
+                Console.Clear();
+                SortMealfForPrice(allRestoBars, AllMealfs, allProducts);
+                break;
+                case"D":                                                               //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>DELETER<<<<<<<<<<<<<<<<<<<<<<<<<<<
                 break;
         }
 
@@ -320,7 +462,7 @@ public class Program
         Console.Clear();
         int secondIndex = index - 1;
         allRestoBars[secondIndex].ViewRestobarInfo();
-        RestoBarsListMenuButtons(allRestoBars);
+        RestoBarsListMenuButtons(allRestoBars, AllMealfs, allProducts);
     }
 
 }

@@ -35,10 +35,21 @@ namespace RestouransAndMenu
         }
         public void ViewRestobarMenu()
         {
+
             int i = 1;
             foreach (var mealf in Mealfs)
             {
                 mealf.Key.ViewProductsAndPrice(i++);
+                
+
+                Mealfs = Mealfs.OrderBy(x => x.Value).ToList();
+              //  Console.WriteLine("SORT FOR SELL PRICE ALL MEALFS:\n\n\n");
+                foreach (var item in Mealfs)
+                {
+                    Console.WriteLine($"{item.Key.MealfName} - {item.Value / 100} Som");
+                }
+
+
                 Console.WriteLine($"\n{mealf.Key.MealfName} sell price = {mealf.Value / 100} Som\n");
             }
         }
