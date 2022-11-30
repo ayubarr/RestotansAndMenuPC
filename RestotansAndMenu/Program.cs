@@ -110,15 +110,22 @@ public class Program
         Console.WriteLine("What is name of your Shef?");
         string restoBarShefName = Console.ReadLine();
 
+        List<Mealf> RestBarMealfs = new List<Mealf>();
+
         //TODO: список всех блюд, и возможность их добавления в ресторан(не обязательно)
-        
-
-        List<Mealf> RestBarMealfs = new List<Mealf>
+        Console.WriteLine("How much Mealfs is needed for create your RestoBar?");
+        string howSManyMealfs = Console.ReadLine();
+        double howManyMealfs;
+        while (!double.TryParse(howSManyMealfs, out howManyMealfs))
         {
-
-        };
-
-        RestBarMealfs = CreateMealfs(RestBarMealfs);
+            Console.WriteLine("Enter only numbers!\nHow much products is needed for cooking your Mealf?");
+            howSManyMealfs = Console.ReadLine();
+        }
+        for (int i = 0; i < howManyMealfs; i++)
+        {
+            Console.Write($"[{i+1} Mealf]");
+            RestBarMealfs = CreateMealfs(RestBarMealfs);
+        }
 
         RestoBar newRestoBar = new RestoBar(restoBarName, restoBarShefName, RestBarMealfs);
         allRestoBars.Add(newRestoBar);
@@ -131,33 +138,43 @@ public class Program
 
 
     }
+    #region Create_RestoBar
     public static List<Mealf> CreateMealfs(List<Mealf> RestBarMealfs)
     {
-        Console.WriteLine("What is your Milf name?");
+        Console.WriteLine("What is your Mealf name?");
         string mealfName = Console.ReadLine();
-        Console.WriteLine("what products are used in this Mealf?");
+       // Console.WriteLine("what products are used in this Mealf?");
 
         //TODO: список всех продуктов, клавиша создать
 
-        Dictionary<Product, double> MealfProducts = new Dictionary<Product, double>
-        {
-
-        };
-
-        Mealf newMealf = new Mealf(mealfName, MealfProducts);
-
-        Product newProduct = CreateProduct();
+        Dictionary<Product, double> MealfProducts = new Dictionary<Product, double>();
 
         Console.WriteLine("How much products is needed for cooking your Mealf?");
-        string prouctSAmount = Console.ReadLine();
-        double prouctAmount;
-        while (!double.TryParse(prouctSAmount, out prouctAmount))
+        string howSManyProducts = Console.ReadLine();
+        double howManyProducts;
+        while (!double.TryParse(howSManyProducts, out howManyProducts))
         {
             Console.WriteLine("Enter only numbers!\nHow much products is needed for cooking your Mealf?");
-            prouctSAmount = Console.ReadLine();
+            howSManyProducts = Console.ReadLine();
         }
 
-        MealfProducts.Add(newProduct, prouctAmount);
+
+        for (int i = 0; i < howManyProducts; i++)
+        {
+            Console.Write($"[{i + 1} Product]");
+            Product newProduct = CreateProduct();
+            Console.WriteLine("How many grams of the product is needed for cooking this Mealf?");
+            string prouctSAmount = Console.ReadLine();
+            double prouctAmount;
+            while (!double.TryParse(prouctSAmount, out prouctAmount))
+            {
+                Console.WriteLine("Enter only numbers!\nHow much products is needed for cooking your Mealf?");
+                prouctSAmount = Console.ReadLine();
+            }
+
+            MealfProducts.Add(newProduct, prouctAmount);
+        }
+        Mealf newMealf = new Mealf(mealfName, MealfProducts);
 
         RestBarMealfs.Add(newMealf);
         return RestBarMealfs;
@@ -184,7 +201,7 @@ public class Program
        //MealfProducts.Add(newProduct, 0);
         return newProduct;
     }
-
+    #endregion
 
 
 
@@ -269,14 +286,14 @@ public class Program
             indexofRestoBars++;
             Console.WriteLine($"Enter {{{indexofRestoBars}}} key - to see Restourant {restobar.Name} info ");
         }
-        Console.WriteLine("\nEnter {R} key - to create new RestoBar\n");
+        Console.WriteLine("\nEnter {C} key - to create new RestoBar\n");
         Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
                           "Enter {Esc} key - to Exit and End Program");
         List<string> keys = new List<string>()
         {
             "Backspace",
             "Escape",
-            "R"
+            "C"
         };
         int secondIndexofRestoBars = indexofRestoBars + 1;
         for (int i = 1; i < secondIndexofRestoBars; i++)
@@ -293,7 +310,7 @@ public class Program
             case "Escape":
                 Environment.Exit(0);
                 break;
-            case "R":
+            case "C":
                 Console.Clear();
                 CreateRestourant(allRestoBars);
                 break;
