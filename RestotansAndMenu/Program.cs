@@ -102,6 +102,94 @@ public class Program
 
         ViewMainMenu(allRestoBars);
     }
+    public static RestoBar CreateRestourant(List<RestoBar> allRestoBars)
+    {
+        Console.WriteLine("What is your RestoBar Name?");
+        string restoBarName = Console.ReadLine();
+
+        Console.WriteLine("What is name of your Shef?");
+        string restoBarShefName = Console.ReadLine();
+
+        //TODO: список всех блюд, и возможность их добавления в ресторан(не обязательно)
+        
+
+        List<Mealf> RestBarMealfs = new List<Mealf>
+        {
+
+        };
+
+        RestBarMealfs = CreateMealfs(RestBarMealfs);
+
+        RestoBar newRestoBar = new RestoBar(restoBarName, restoBarShefName, RestBarMealfs);
+        allRestoBars.Add(newRestoBar);
+        Console.Clear();
+        ViewRestoBars(allRestoBars);
+
+        return newRestoBar;
+
+        //TODO: добавить клавиши для меню
+
+
+    }
+    public static List<Mealf> CreateMealfs(List<Mealf> RestBarMealfs)
+    {
+        Console.WriteLine("What is your Milf name?");
+        string mealfName = Console.ReadLine();
+        Console.WriteLine("what products are used in this Mealf?");
+
+        //TODO: список всех продуктов, клавиша создать
+
+        Dictionary<Product, double> MealfProducts = new Dictionary<Product, double>
+        {
+
+        };
+
+        Mealf newMealf = new Mealf(mealfName, MealfProducts);
+
+        Product newProduct = CreateProduct();
+
+        Console.WriteLine("How much products is needed for cooking your Mealf?");
+        string prouctSAmount = Console.ReadLine();
+        double prouctAmount;
+        while (!double.TryParse(prouctSAmount, out prouctAmount))
+        {
+            Console.WriteLine("Enter only numbers!\nHow much products is needed for cooking your Mealf?");
+            prouctSAmount = Console.ReadLine();
+        }
+
+        MealfProducts.Add(newProduct, prouctAmount);
+
+        RestBarMealfs.Add(newMealf);
+        return RestBarMealfs;
+
+
+        //TODO: добавить клавиши для меню
+
+    }
+    public static Product CreateProduct()
+    {
+
+        Console.WriteLine("What is your product name?");
+        string productName = Console.ReadLine();
+        Console.WriteLine("what is its price per gram?(in kopecks)");
+        string prouctSPrice = Console.ReadLine();
+        double prouctPrice;
+        while (!double.TryParse(prouctSPrice, out prouctPrice))
+        {
+            Console.WriteLine("Enter only numbers!\nWhat is its price per gram?");
+            prouctSPrice = Console.ReadLine();
+        }
+        Product newProduct = new Product(productName, prouctPrice);
+
+       //MealfProducts.Add(newProduct, 0);
+        return newProduct;
+    }
+
+
+
+
+
+
     public static void ViewMainMenu(List<RestoBar> allRestoBars)
     {
         Console.WriteLine("MAIN MENU");
@@ -172,23 +260,23 @@ public class Program
         while (!keys.Contains(input));
         return input;
     }
-   // ConsoleKey consoleKey = new ConsoleKey();
+    //ConsoleKey consoleKey = new ConsoleKey();
     public static void ViewRestoBars(List<RestoBar> allRestoBars)
     {
         int indexofRestoBars = 0;
-
         foreach (var restobar in allRestoBars)
         {
             indexofRestoBars++;
             Console.WriteLine($"Enter {{{indexofRestoBars}}} key - to see Restourant {restobar.Name} info ");
         }
+        Console.WriteLine("\nEnter {R} key - to create new RestoBar\n");
         Console.WriteLine("\n\nEnter {Backspace} key - to BACK\n" +
                           "Enter {Esc} key - to Exit and End Program");
-
         List<string> keys = new List<string>()
         {
             "Backspace",
-            "Escape",            
+            "Escape",
+            "R"
         };
         int secondIndexofRestoBars = indexofRestoBars + 1;
         for (int i = 1; i < secondIndexofRestoBars; i++)
@@ -205,6 +293,10 @@ public class Program
             case "Escape":
                 Environment.Exit(0);
                 break;
+            case "R":
+                Console.Clear();
+                CreateRestourant(allRestoBars);
+                break;
         }
 
         int index = Convert.ToInt32(choiceButtom);
@@ -213,4 +305,5 @@ public class Program
         allRestoBars[secondIndex].ViewRestobarInfo();
         RestoBarsListMenuButtons(allRestoBars);
     }
+
 }
